@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ES6",  // Compile to ES6
+    "module": "CommonJS",  // Node.js uses CommonJS module system
+    "rootDir": "./src",  // Source files
+    "outDir": "./dist",  // Output directory
+    "esModuleInterop": true,  // Allows default import of CommonJS modules
+    "strict": true,  // Enable strict type-checking
+    "skipLibCheck": true  // Skips type checking on declaration files (faster)
+  }
+}
