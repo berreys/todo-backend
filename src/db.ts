@@ -17,7 +17,24 @@ export async function loginOrRegister(username: string) : Promise<UserInfo | nul
 }
 
 async function login(username: string) : Promise<UserInfo | null> {
-    return null;
+    try {
+        await client.connect();
+        const database = client.db('todo-db');
+        const collection = database.collection('userInfo');
+        const document = await collection.findOne({username: username});
+        if(document === null) return null;
+        return {
+            username: document.username,
+            tasks: document.tasks
+        }
+    }
+    catch(error) {
+        console.error("Error logging in:", error);
+        return null;
+    }
+    finally {
+        await client.close();
+    }
 }
 
 async function register(username: string) : Promise<UserInfo | null> {
