@@ -34,7 +34,7 @@ const loadRoutes = (app: express.Application) => {
 loadRoutes(app);
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('Evie\nConnecting EV drivers to thousands of chargers around the country.');
+    res.send('Sam Berrey TODO app backend service');
 });
 
 // Start the server
