@@ -138,3 +138,28 @@ export async function removeTask(username: string, index: number) {
         await client.close();
     }
 }
+
+export async function completeTask(username: string, index: number) {
+    try {
+        await client.connect();
+        const database = client.db('todo-db');
+        const collection = database.collection('userInfo');
+        const result = await collection.updateOne(
+            { username: username },
+            { $set: { [`tasks.${index}.state`]: 'complete' } }
+        )
+        
+        if(result.matchedCount === 0) {
+            console.log("User not found or invalid index");
+        }
+        else {
+            console.log("Task completed");
+        }
+    }
+    catch(error) {
+        console.error("Error completing task:", error);
+    }
+    finally {
+        await client.close();
+    }
+}
