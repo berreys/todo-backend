@@ -83,3 +83,28 @@ export async function addItem(username: string, task: Task) {
         await client.close();
     }
 }
+
+export async function editItem(username: string, index: number, newText: string) {
+    try {
+        await client.connect();
+        const database = client.db('todo-db');
+        const collection = database.collection('userInfo');
+        const result = await collection.updateOne(
+            { username: username },
+            { $set: { [`tasks.${index}.text`]: newText }}
+        );
+
+        if(result.matchedCount === 0) {
+            console.log("User not found or invalid index");
+        }
+        else {
+            console.log("Task edited successfully");
+        }
+    }
+    catch(error) {
+        console.error("Error editing text:", error);
+    }
+    finally {
+        await client.close();
+    }
+}

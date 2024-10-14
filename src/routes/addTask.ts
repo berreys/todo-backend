@@ -6,8 +6,8 @@ const router = Router();
 
 router.put('/', async (req: Request, res: Response) => {
     try {
-        const username = req.body.username;
-        const task = req.body.task;
+        const username: string = req.body.username;
+        const task: Task = req.body.task;
     
         if (!username || !task || !task.state || !task.text) {
             res.status(400).send('Invalid request data');
