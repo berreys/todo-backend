@@ -4,9 +4,9 @@ import { UserInfo } from '../types';
 
 const router = Router();
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/:username', async (req: Request, res: Response) => {
     try {
-        const username: string = req.body.username;
+        const username: string = req.params.username;
         const result: UserInfo | null = await loginOrRegister(username);
         if(result !== null) {
             res.status(210).send(result);
