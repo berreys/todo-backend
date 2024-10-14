@@ -9,7 +9,7 @@ router.get('/:username', async (req: Request, res: Response) => {
         const username: string = req.params.username;
         const result: UserInfo | null = await loginOrRegister(username);
         if(result !== null) {
-            res.status(210).send(result);
+            res.status(200).send(result);
         }
         else {
             res.status(400).send('Failed to login.');
