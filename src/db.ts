@@ -1,5 +1,5 @@
 import { MongoClient, InsertOneResult } from 'mongodb';
-import { UserInfo } from './types';
+import { UserInfo, Task } from './types';
 
 const config = {
     username: process.env.DB_USERNAME,
@@ -53,6 +53,31 @@ async function register(username: string) : Promise<UserInfo | null> {
     catch(error) {
         console.error("Error registering user:", error);
         return null;
+    }
+    finally {
+        await client.close();
+    }
+}
+
+export async function addItem(username: string, task: Task) {
+    try {
+        await client.connect();
+        const database = client.db('todo-db');
+        const collection = database.collection<UserInfo>('userInfo');
+        const result = await collection.updateOne(
+            { username: username },
+            { $push: { tasks: task } }
+        );
+
+        if(result.matchedCount === 0) {
+            console.log("User not found");
+        }
+        else {
+            console.log("Task added successfully");
+        }
+    }
+    catch(error) {
+        console.error("Error adding task:", error);
     }
     finally {
         await client.close();
