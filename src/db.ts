@@ -91,7 +91,7 @@ export async function editItem(username: string, index: number, newText: string)
         const collection = database.collection('userInfo');
         const result = await collection.updateOne(
             { username: username },
-            { $set: { [`tasks.${index}.text`]: newText }}
+            { $set: { [`tasks.${index}.text`]: newText } }
         );
 
         if(result.matchedCount === 0) {
@@ -103,6 +103,36 @@ export async function editItem(username: string, index: number, newText: string)
     }
     catch(error) {
         console.error("Error editing text:", error);
+    }
+    finally {
+        await client.close();
+    }
+}
+
+export async function removeTask(username: string, index: number) {
+    try {
+        await client.connect();
+        const database = client.db('todo-db');
+        const collection = database.collection('userInfo');
+        const document = await collection.findOne({ username: username });
+        if(!document){
+            console.log("User not found");
+            return;
+        }
+        const updatedTasks = document.tasks.filter((_:any, i:any) => index !== i);
+        const result = await collection.updateOne(
+            { username: username},
+            { $set: { tasks: updatedTasks}}
+        )
+        if(result.modifiedCount > 0) {
+            console.log("Successfully edited task.");
+        }
+        else {
+            console.log("No tasks were edited.");
+        }
+    }
+    catch(error) {
+        console.error("Error removing item:", error);
     }
     finally {
         await client.close();
